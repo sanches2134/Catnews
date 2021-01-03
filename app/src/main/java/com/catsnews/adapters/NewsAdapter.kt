@@ -13,51 +13,53 @@ import com.catsnews.catnews.R
 import com.catsnews.models.Article
 import kotlinx.android.synthetic.main.item_preview.view.*
 
-class NewsAdapter :RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
+class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
-    inner class ArticleViewHolder(itemView:View):RecyclerView.ViewHolder(itemView)
+    inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    private val differentCallBack=object:DiffUtil.ItemCallback<Article>(){
+    private val differentCallBack = object : DiffUtil.ItemCallback<Article>() {
         override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
-            return oldItem.id==newItem.id
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
-           return oldItem==newItem
+            return oldItem == newItem
         }
     }
-    val different=AsyncListDiffer(this,differentCallBack)
+    val different = AsyncListDiffer(this, differentCallBack)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         return ArticleViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_preview,
-                parent,
-                false
-            )
+                LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_preview,
+                        parent,
+                        false
+                )
         )
     }
 
     override fun onBindViewHolder(
-        holder: ArticleViewHolder,
-        position: Int, ) {
-        val article=different.currentList[position]
+            holder: ArticleViewHolder,
+            position: Int,
+    ) {
+        val article = different.currentList[position]
         holder.itemView.apply {
             Glide.with(this).load(article.urlToImage).into(ivArticleImage)
-            tvSource.text=article.source.name
-            tvTitle.text=article.title
-            tvDescription.text=article.description
-            tvPublishedAt.text=article.publishedAt
+            tvSource.text = article.source?.name
+            tvTitle.text = article.title
+            tvDescription.text = article.description
+            tvPublishedAt.text = article.publishedAt
             setOnClickListener {
                 onItemClickListener?.let { it(article) }
             }
         }
 
     }
-    private var onItemClickListener:((Article)->Unit)?=null
 
-    fun setOnItemClickListener(listener: (Article)->Unit) {
-        onItemClickListener=listener
+    private var onItemClickListener: ((Article) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (Article) -> Unit) {
+        onItemClickListener = listener
     }
 
     override fun getItemCount(): Int {

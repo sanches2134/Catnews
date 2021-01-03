@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.webkit.WebViewClient
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.catsnews.ui.activity.MainActivity
 import com.catsnews.catnews.R
@@ -17,18 +18,18 @@ class WebFragment : Fragment(R.layout.fragment_web) {
     val args: WebFragmentArgs by navArgs()
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel=(activity as MainActivity).viewModel
-        val article=args.article
+        viewModel = (activity as MainActivity).viewModel
+        val article = args.article
         webView.apply {
-            webViewClient= WebViewClient()
-            loadUrl(article.url)
+            webViewClient = WebViewClient()
+            article.url?.let { loadUrl(it) }
         }
         fab.setOnClickListener {
             viewModel.saveArticle(article)
-            Snackbar.make(view,"Новость сохранена!", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(view, "Новость сохранена!", Snackbar.LENGTH_SHORT).show()
         }
+
     }
 }

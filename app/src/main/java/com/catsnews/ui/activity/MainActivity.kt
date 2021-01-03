@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val newsrepository=NewsRepository(ArticleDataBase(this))
         val viewModelProviderFactory=newsVMProviderFactory(application,newsrepository)
         viewModel=ViewModelProvider(this, viewModelProviderFactory).get(NewsViewModel::class.java)

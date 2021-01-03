@@ -45,7 +45,7 @@
                 android:singleLine="true"
                 android:layout_marginEnd="160dp"
                 android:gravity="bottom"
-                android:text="SOURCE"
+                android:text="@string/source"
                 android:textSize="15sp"
                 android:textColor="@android:color/white"
                 android:layout_alignLeft="@id/tvTitle"
@@ -57,7 +57,7 @@
 
             <TextView
                 android:id="@+id/tvPublishedAt"
-                android:text="PUBLISHED AT"
+                android:text="@string/published_at"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ivArticleImage"
@@ -79,7 +79,7 @@
                 android:layout_below="@id/ivArticleImage"
                 android:ellipsize="end"
                 android:maxLines="3"
-                android:text="TITLE"
+                android:text="@string/title"
                 android:textColor="@android:color/black"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -91,7 +91,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="5dp"
-                android:text="DESCRIPTION"
+                android:text="@string/description"
                 android:layout_below="@id/tvTitle" />
 
 

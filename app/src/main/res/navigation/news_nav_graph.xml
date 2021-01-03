@@ -12,6 +12,7 @@
         <argument
             android:name="article"
             app:argType="com.catsnews.models.Article" />
+
     </fragment>
     <fragment
         android:id="@+id/newsFragment"
@@ -31,4 +32,9 @@
             android:id="@+id/action_savedNewsFragment_to_webFragment"
             app:destination="@id/webFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.catsnews.ui.fragments.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
 </navigation>

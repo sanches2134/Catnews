@@ -15,44 +15,46 @@ import com.catsnews.viewmodels.NewsViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_saved_news.*
 
+
 class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
 
     lateinit var viewModel: NewsViewModel
     lateinit var newsAdapter: NewsAdapter
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel=(activity as MainActivity).viewModel
-        viewModel=(activity as MainActivity).viewModel
+        viewModel = (activity as MainActivity).viewModel
+        viewModel = (activity as MainActivity).viewModel
         bindRV()
         newsAdapter.setOnItemClickListener {
-            val bundle=Bundle().apply {
-                putSerializable("article",it)
+            val bundle = Bundle().apply {
+                putSerializable("article", it)
             }
             findNavController().navigate(
-                R.id.action_savedNewsFragment_to_webFragment,
-                bundle
+                    R.id.action_savedNewsFragment_to_webFragment,
+                    bundle
             )
         }
 
-        val itemTouchHelper=object :ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        ){
+        val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
             override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
             ): Boolean {
                 return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-               val position=viewHolder.adapterPosition
-                val article=newsAdapter.different.currentList[position]
+                val position = viewHolder.adapterPosition
+                val article = newsAdapter.different.currentList[position]
                 viewModel.deleteArticle(article)
                 Snackbar.make(view, "Новость удалена!", Snackbar.LENGTH_LONG).apply {
-                    setAction("Undo"){
+                    setAction("Undo") {
                         viewModel.saveArticle(article)
                     }
                     show()
@@ -68,11 +70,12 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
             newsAdapter.different.submitList(it)
         })
     }
-    private fun bindRV(){
-        newsAdapter= NewsAdapter()
+
+    private fun bindRV() {
+        newsAdapter = NewsAdapter()
         rvSavedNews.apply {
-            adapter=newsAdapter
-            layoutManager= LinearLayoutManager(activity)
+            adapter = newsAdapter
+            layoutManager = LinearLayoutManager(activity)
         }
     }
 }

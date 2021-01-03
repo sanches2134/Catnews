@@ -5,28 +5,28 @@ import androidx.room.*
 import com.catsnews.models.Article
 
 @Database(
-    entities = [Article::class],
-    version = 1
+        entities = [Article::class],
+        version = 1
 )
 @TypeConverters(Converters::class)
-abstract class ArticleDataBase:RoomDatabase() {
+abstract class ArticleDataBase : RoomDatabase() {
 
-    abstract fun getArticleDao():ArticleDao
+    abstract fun getArticleDao(): ArticleDao
 
-    companion object{
+    companion object {
         @Volatile
-        private var instance:ArticleDataBase?=null
-        private val LOCK=Any()
+        private var instance: ArticleDataBase? = null
+        private val LOCK = Any()
 
-        operator fun invoke(context: Context)= instance ?: synchronized(LOCK) {
-            instance ?:createDatabase(context).also { instance=it }
+        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
+            instance ?: createDatabase(context).also { instance = it }
         }
 
-        private fun createDatabase(context: Context)=
-            Room.databaseBuilder(
-                context.applicationContext,
-                ArticleDataBase::class.java,
-                "article_db.db"
-            ).build()
+        private fun createDatabase(context: Context) =
+                Room.databaseBuilder(
+                        context.applicationContext,
+                        ArticleDataBase::class.java,
+                        "article_db.db"
+                ).build()
     }
 }

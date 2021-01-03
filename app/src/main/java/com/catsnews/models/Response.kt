@@ -1,7 +1,7 @@
 package com.catsnews.models
 
-data class Response (
+data class Response(
         val articles: MutableList<Article>,
-        val status: String,
-        val totalResults: Int
+        val status: String?=null,
+        val totalResults: Int?=null
 )
