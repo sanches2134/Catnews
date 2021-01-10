@@ -1,14 +1,14 @@
-package com.catsnews.database
+package com.catsnews.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.catsnews.models.Article
+import com.catsnews.domain.entity.Article
 
 @Dao
 interface ArticleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(atricle: Article): Long
+    suspend fun upsert(article: Article): Long
 
     @Query("SELECT * FROM articles")
     fun getAllArticles(): LiveData<List<Article>>

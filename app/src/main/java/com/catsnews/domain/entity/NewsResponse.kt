@@ -1,6 +1,6 @@
-package com.catsnews.models
+package com.catsnews.domain.entity
 
-data class Response(
+data class NewsResponse(
         val articles: MutableList<Article>,
         val status: String?=null,
         val totalResults: Int?=null

@@ -10,9 +10,18 @@
         android:label="fragment_web"
         tools:layout="@layout/fragment_web" >
         <argument
-            android:name="article"
-            app:argType="com.catsnews.models.Article" />
-
+            android:name="Article"
+            app:argType="com.catsnews.domain.entity.Article" />
+        <action
+            android:id="@+id/action_webFragment_to_newsFragment"
+            app:destination="@id/newsFragment" />
+        <action
+            android:id="@+id/action_webFragment_to_savedNewsFragment"
+            app:destination="@id/savedNewsFragment" />
+        <argument
+            android:name="previous"
+            app:argType="integer"
+            android:defaultValue="1" />
     </fragment>
     <fragment
         android:id="@+id/newsFragment"

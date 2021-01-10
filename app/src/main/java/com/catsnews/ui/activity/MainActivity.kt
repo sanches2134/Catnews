@@ -2,28 +2,26 @@ package com.catsnews.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.catsnews.NewsApp
 import com.catsnews.catnews.R
-import com.catsnews.database.ArticleDataBase
-import com.catsnews.repository.NewsRepository
-import com.catsnews.viewmodels.NewsViewModel
-import com.catsnews.viewmodels.newsVMProviderFactory
+import com.catsnews.presentation.viewmodel.NewsViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var viewModel: NewsViewModel
+    @Inject lateinit var viewModel: NewsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setTheme(R.style.Theme_Screen)
         setContentView(R.layout.activity_main)
 
-        val newsrepository=NewsRepository(ArticleDataBase(this))
-        val viewModelProviderFactory=newsVMProviderFactory(application,newsrepository)
-        viewModel=ViewModelProvider(this, viewModelProviderFactory).get(NewsViewModel::class.java)
+        NewsApp.component.injectMainActivity(this)
 
         bottomNavigationView.setupWithNavController(newsNavHostFragment.findNavController())
     }

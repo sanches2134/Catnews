@@ -1,4 +1,4 @@
-package com.catsnews.models
+package com.catsnews.domain.entity
 
 data class Source(
         val id: Any,

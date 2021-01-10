@@ -13,13 +13,10 @@ import kotlinx.android.synthetic.main.fragment_map.*
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
-        val map = ArcGISMap(Basemap.Type.TOPOGRAPHIC, 34.056295, -117.195800, 16)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val map = ArcGISMap(Basemap.Type.TOPOGRAPHIC, 56.464097, 84.979557, 16)
         mapVieww.map = map
     }
 

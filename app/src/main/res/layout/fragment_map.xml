@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.catsnews.ui.fragments.MapFragment">
+    tools:context="com.catsnews.ui.fragments.MapFragment"
+    >
 
     <com.esri.arcgisruntime.mapping.view.MapView
         android:id="@+id/mapVieww"

@@ -1,8 +1,9 @@
-package com.catsnews.models
+package com.catsnews.domain.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
+import kotlin.system.exitProcess
 
 @Entity(
         tableName = "articles"

@@ -1,23 +1,21 @@
-package com.catsnews.adapters
+package com.catsnews.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.util.Util
 import com.catsnews.catnews.R
-import com.catsnews.models.Article
+import com.catsnews.domain.entity.Article
 import kotlinx.android.synthetic.main.item_preview.view.*
 
 class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    private val differentCallBack = object : DiffUtil.ItemCallback<Article>() {
+    private val differCallBack = object : DiffUtil.ItemCallback<Article>() {
         override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
             return oldItem.id == newItem.id
         }
@@ -26,7 +24,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
             return oldItem == newItem
         }
     }
-    val different = AsyncListDiffer(this, differentCallBack)
+    val differ = AsyncListDiffer(this, differCallBack)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         return ArticleViewHolder(
@@ -42,7 +40,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
             holder: ArticleViewHolder,
             position: Int,
     ) {
-        val article = different.currentList[position]
+        val article = differ.currentList[position]
         holder.itemView.apply {
             Glide.with(this).load(article.urlToImage).into(ivArticleImage)
             tvSource.text = article.source?.name
@@ -63,6 +61,6 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return different.currentList.size
+        return differ.currentList.size
     }
 }

@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AbsListView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.catsnews.ui.activity.MainActivity
-import com.catsnews.adapters.NewsAdapter
+import com.catsnews.ui.adapter.NewsAdapter
 import com.catsnews.catnews.R
-import com.catsnews.constants.Constants.Companion.QUERY_PAGE_SIZE
-import com.catsnews.constants.Resource
-import com.catsnews.viewmodels.NewsViewModel
+import com.catsnews.data.network.Constants.QUERY_PAGE_SIZE
+import com.catsnews.data.network.Resource
+import com.catsnews.presentation.viewmodel.NewsViewModel
 import kotlinx.android.synthetic.main.fragment_news.*
 import kotlinx.android.synthetic.main.item_error.*
 
@@ -22,15 +21,18 @@ import kotlinx.android.synthetic.main.item_error.*
 class NewsFragment : Fragment(R.layout.fragment_news) {
 
     lateinit var viewModel: NewsViewModel
-    lateinit var newsAdapter: NewsAdapter
+    private lateinit var newsAdapter: NewsAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewModel = (activity as MainActivity).viewModel
         bindRV()
+
         newsAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
-                putSerializable("article", it)
+                putSerializable("Article", it)
+                putSerializable("previous",1)
             }
             findNavController().navigate(
 
@@ -39,20 +41,20 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
             )
         }
 
-        viewModel.news.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Succes -> {
+        viewModel.news.observe(viewLifecycleOwner,  { resource ->
+            when (resource) {
+                is Resource.Success -> {
                     hideProgressBar()
                     hideErrorMessage()
-                    it.data?.let { it ->
-                        newsAdapter.different.submitList(it.articles.toList())
-                        val totalPages = (it.totalResults?.div(QUERY_PAGE_SIZE)?.plus(2))
-                        isLastPage = viewModel.newsPage == totalPages
+                    resource.data?.let { request ->
+                        newsAdapter.differ.submitList(request.articles.toList())
+                        val totalPages = (request.totalResults?.div(QUERY_PAGE_SIZE)?.plus(2))
+                        lastPage = viewModel.newsPage == totalPages
                     }
                 }
                 is Resource.Error -> {
                     hideProgressBar()
-                    it.message?.let {
+                    resource.message?.let {
                         if (it != "")
                             showErrorMessage(it)
                     }
@@ -69,49 +71,49 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
 
     private fun hideProgressBar() {
         paginationProgressBar.visibility = View.INVISIBLE
-        isLoading = false
+        loading = false
     }
 
     private fun showProgressBar() {
         paginationProgressBar.visibility = View.VISIBLE
-        isLoading = true
+        loading = true
     }
 
     private fun hideErrorMessage() {
         itemErrorMessage.visibility = View.INVISIBLE
-        isError = false
+        error = false
     }
 
     private fun showErrorMessage(message: String) {
         itemErrorMessage.visibility = View.VISIBLE
         tvErrorMessage.text = message
-        isError = true
+        this.error = true
     }
 
-    var isLoading = false
-    var isError = false
-    var isLastPage = false
-    var isScrolling = false
-    val scrollListener = object : RecyclerView.OnScrollListener() {
+    var loading = false
+    private var error = false
+    var lastPage = false
+    var scrolling = false
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
 
             val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-            val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-            val totalItemCount = layoutManager.itemCount
+            val firstItem = layoutManager.findFirstVisibleItemPosition()
+            val itemCount = layoutManager.itemCount
 
-            val isNotLoadLastPage = !isLoading && !isLastPage
-            val isAtLastItem = firstVisibleItemPosition >= 0
-            val isNotAtBeginning = firstVisibleItemPosition >= QUERY_PAGE_SIZE
-            val isTotalMoreThanVisible = totalItemCount >= QUERY_PAGE_SIZE
-            val shouldPagination = isNotLoadLastPage &&
+            val isNotLoadLastPage = !loading && !lastPage
+            val isAtLastItem = firstItem >= 0
+            val isNotAtBeginning = firstItem >= QUERY_PAGE_SIZE
+            val isTotalMoreThanVisible = itemCount >= QUERY_PAGE_SIZE
+            val pagination = isNotLoadLastPage &&
                     isAtLastItem &&
                     isNotAtBeginning &&
                     isTotalMoreThanVisible &&
-                    isScrolling
-            if (shouldPagination) {
+                    scrolling
+            if (pagination) {
                 viewModel.getNews("ru")
-                isScrolling = false
+                scrolling = false
             } else {
                 rvBreakingNews.setPadding(0, 0, 0, 0)
             }
@@ -120,7 +122,7 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
             if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                isScrolling = true
+                scrolling = true
             }
         }
     }

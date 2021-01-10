@@ -1,11 +1,11 @@
-package com.catsnews.api
+package com.catsnews.data.network
 
-import com.catsnews.constants.Constants.Companion.API_KEY
+import com.catsnews.data.network.Constants.API_KEY
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface Api {
+interface NewsApi {
     @GET("v2/top-headlines")
     suspend fun getNews(
             @Query("country")
@@ -14,6 +14,6 @@ interface Api {
             pageNumber: Int = 1,
             @Query("apiKey")
             apiKey: String = API_KEY
-    ): Response<com.catsnews.models.Response>
+    ): Response<com.catsnews.domain.entity.NewsResponse>
 
 }

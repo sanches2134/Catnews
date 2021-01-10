@@ -1,7 +1,7 @@
-package com.catsnews.database
+package com.catsnews.data.database
 
 import androidx.room.TypeConverter
-import com.catsnews.models.Source
+import com.catsnews.domain.entity.Source
 
 class Converters {
 

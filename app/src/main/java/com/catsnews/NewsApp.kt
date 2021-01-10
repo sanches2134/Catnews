@@ -1,14 +1,20 @@
 package com.catsnews
 
 import android.app.Application
+import com.catsnews.di.component.AppComponent
+import com.catsnews.di.component.DaggerAppComponent
+import com.catsnews.di.module.ContextModule
 
 
-class NewsApp : Application(){
-    /*override fun onCreate() {
+class NewsApp : Application() {
+    companion object {
+        lateinit var component: AppComponent
+    }
+
+    override fun onCreate() {
         super.onCreate()
-        startKoin {
-            androidContext(this@NewsApp)
-            modules(listOf(appmodel))
-        }
-    }*/
+        component =
+            DaggerAppComponent.builder().contextModule(ContextModule(this.applicationContext))
+                .build()
+    }
 }
